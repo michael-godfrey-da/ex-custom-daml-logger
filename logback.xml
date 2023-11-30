@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Changes to logback.xml will be picked up every 10 seconds -->
+<configuration scan="true" scanPeriod="10 seconds">
+    <!--====
+        CustomLevelConverter
+        ==== 
+        Modify CustomLevelConverter.java to define how log level is set -->
+    <conversionRule conversionWord="myconvword" converterClass="com.digitalasset.excustomlogger.CustomLevelConverter" />
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-10myconvword%d{HH:mm:ss.SSS} - %replace(%replace(%msg){'\\\"', ''}){'\[unknown source\]: ',''}%n</pattern>
+        </layout>
+        <filter class="com.digitalasset.excustomlogger.RegexLevelFilter">
+            <!--====
+                RegexLevelFilter
+                ====
+                Modify RegexLevelFilter.java to define any custom behavior
+                - newLevel will be the actual log level used
+                - regexPattern can be used to determine which log messages will print regardless of log level -->
+            <regexPattern>.*KEYWORD.*</regexPattern>
+            <newLevel>INFO</newLevel>
+        </filter>
+    </appender>
+    <root level="TRACE">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
